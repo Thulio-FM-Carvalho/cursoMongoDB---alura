@@ -1,0 +1,124 @@
+//Criando uma coleção do tipo aluno
+db.createCollection("alunos")  
+
+//Inserindo dados
+db.alunos.insert(
+{
+    "nome": "Felipe",
+    "data_nascimento": new Date(1994,02,26),
+    "curso": {
+        "nome": "Sistemas de Informação"
+    },
+    "notas": [10.0, 9.0, 4.5],
+    //Array de habilidades
+    "habilidades": [
+        {
+            "nome": "inglês",
+            "nível": "avançado"
+        },
+        {
+            "nome": "taekwondo",
+            "nível": "básico"
+        }
+    ]   
+}
+)
+
+db.alunos.insert(
+{
+    "nome": "Felipe",
+    "data_nascimento": new Date(1979,12,31),
+    "curso": {
+        "nome": "Ciências da computação"
+    },
+    "notas": [10, 9, 7],
+    "habilidades": [
+        {
+            "nome": "inglês",
+            "habilidade": "avançado"
+        },
+        {
+            "nome": "francês",
+            "habilidade": "Avançado" 
+        }
+    ]
+}
+)
+
+db.alunos.insert(
+{
+    "nome": "Daniela",
+    "data_nascimento": new Date(1995,07,17),
+    "curso": {
+        "nome": "Moda"
+    },
+    "notas": [10, 9, 7],
+    "habilidades": [
+        {
+            "nome": "Alemão",
+            "habilidade": "Básico"
+        }
+    ]
+}
+)
+
+//listando as coleções de forma identada
+db.alunos.find().pretty() 
+
+//Listando a coleção alunos cujo o nome seja felipe
+db.alunos.find(
+{
+    "nome": "Felipe"
+}
+).pretty()
+
+//Listando a coleção alunos cujo o nome da habilidade seja "inglês"
+db.alunos.find({
+    "habilidades.nome": "inglês"
+}).pretty()
+
+//Utilizando operador OR que lista os alunos cujo tem os cursos abaixo
+db.alunos.find({
+    $or : [
+        {"curso.nome": "Sistemas de Informação"},
+        {"curso.nome": "Engenharia Química"}
+    ]
+})
+
+//Utilizando operador OR e AND que lista somente o aluno cujo tem os cursos abaixo
+db.alunos.find({
+    $or : [
+        {"curso.nome": "Sistemas de Informação"},
+        {"curso.nome": "Engenharia Química"},
+        {"curso.nome": "Moda"}
+    ], //Operador AND
+    "nome": "Daniela"
+})
+
+//Utilizando operador IN que lista somente o aluno cujo tem os cursos abaixo
+db.alunos.find({
+    "curso.nome": {
+        $in: ["Sistemas de Informação", "Engenharia Química"]
+    }
+})
+
+//Removendo por ID
+db.alunos.remove({
+    "_id": ObjectId("5dc075f11f4c16e1a8c7cd29")
+})
+
+//Fazendo um update passando o nome correto do curso
+db.alunos.update(
+    {"curso.nome": "Sistemas de Informaçã",},
+    {
+        $set: {
+            "curso.nome": "Sistemas de Informação"
+        }
+    }, {
+        multi: true //Realizando o update para múltiplas linhas
+    }
+)
+
+
+
+
